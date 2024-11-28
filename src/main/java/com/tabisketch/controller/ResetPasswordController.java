@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("")
-public class PasswordResetController {
+public class ResetPasswordController {
     @GetMapping()
     public String passwordReset() {
         return "";
