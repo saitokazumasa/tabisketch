@@ -5,6 +5,15 @@
     <title>Title</title>
 </head>
 <body>
+<th:block th:fragment="googleMapsAPI">
+    <script
+        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${googleMapsApiKey} + '&callback=initAutoComplete&libraries=places&v=weekly'"
+        async
+        defer
+    >
+    </script>
+</th:block>
+
 <th:block th:fragment="header">
     <script src="/js/header.js"></script>
 </th:block>
@@ -13,12 +22,15 @@
     <script src="/js/flowbite.min.js"></script>
 </th:block>
 
+<th:block th:fragment="check">
+    <script src="/js/checkSession.js"></script>
+</th:block>
+
+<th:block th:fragment="map">
+    <script src="/js/map.js"></script>
+</th:block>
+
 <th:block th:fragment="modal">
-    <script
-        th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${googleMapsApiKey} + '&callback=initAutoComplete&libraries=places&v=weekly'"
-        async
-        defer
-    ></script>
     <script src="/js/autocomplete.js"></script>
     <script src="/js/modal.js"></script>
 </th:block>
