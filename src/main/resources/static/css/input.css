@@ -18,16 +18,16 @@ body {
     .input {
         @apply rounded-lg bg-white border-2 border-frame p-2 focus:outline-none focus:border-label;
     }
-    .svg-cycle {
-        @apply w-16 fill-label hover:fill-interactive transition-colors duration-75;
-    }
     .svg-car {
-        @apply w-16 fill-label hover:fill-interactive transition-colors duration-75;
-    }
-    .svg-train {
-        @apply w-16 h-14 fill-label hover:fill-interactive transition-colors duration-75;
+        @apply items-center w-16 peer-checked:text-interactive;
     }
     .svg-walk {
-        @apply w-16 h-10 fill-label hover:fill-interactive transition-colors duration-75;
+        @apply items-center w-16 peer-checked:text-interactive;
+    }
+    .svg-cycle {
+        @apply items-center w-16 peer-checked:text-interactive;
+    }
+    .svg-train {
+        @apply items-center w-16 peer-checked:text-interactive;
     }
 }
