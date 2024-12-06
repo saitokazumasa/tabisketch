@@ -27,8 +27,8 @@ public class RegisterForm {
     }
 
     public User toUser() {
-        final String encryptedPassword = new EncryptedPassword(password).value();
-        return User.generate(mail, encryptedPassword);
+        final var encryptedPassword = EncryptedPassword.generate(this.password);
+        return User.generate(mail, encryptedPassword.value());
     }
 
     public boolean isNotMatchPasswordAndRePassword() {

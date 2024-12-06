@@ -10,14 +10,15 @@
     <!--<div th:if="${param.error}" class="error-message">-->
     <!--    メールアドレス、またはパスワードが違います-->
     <!--</div>-->
-    <form th:action="@{/user/edit/mail-confirm}" method="post" class="w-full sm:max-w-lg max-w-xs">
+    <form th:action="@{/user/edit/mail}" th:object="${sendEditMailForm}" method="post" class="w-full sm:max-w-lg max-w-xs">
+        <input th:field="*{currentMail}" required hidden aria-label>
         <div class="my-10">
             <label for="mail" class="block sm:text-base text-sp-default sm:my-1 my-0.5 text-sm">新しいメールアドレス</label>
-            <input id="mail" type="email" required class="w-full input"/>
+            <input th:field="*{newMail}" id="mail" type="email" required class="w-full input"/>
         </div>
         <div class="my-10">
             <label for="currentPassword" class="block sm:text-base text-sp-default sm:my-1 my-0.5 text-sm">現在のパスワード</label>
-            <input id="currentPassword" type="password" required class="w-full input"/>
+            <input th:field="*{currentPassword}"  id="currentPassword" type="password" required class="w-full input"/>
         </div>
         <div class="flex items-center justify-center">
             <button type="submit" class="button-primary" style="max-width: 7.375rem">変更</button>

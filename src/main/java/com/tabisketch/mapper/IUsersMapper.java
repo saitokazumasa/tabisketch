@@ -12,6 +12,12 @@ public interface IUsersMapper {
     @Select("SELECT * FROM users WHERE mail = #{mail}")
     User selectByMail(final String mail);
 
+    @Update("UPDATE users SET mail = #{mail} WHERE id = #{id}")
+    int updateMail(final int id, final String mail);
+
     @Update("UPDATE users SET is_mail_verified = #{isMailVerified} WHERE id = #{id}")
     int updateMailVerified(final int id, final boolean isMailVerified);
+
+    @Select("SELECT COUNT(*) FROM users WHERE mail = #{mail}")
+    int isExistMail(final String mail);
 }

@@ -19,6 +19,7 @@ public class MailAuthenticationTokensMapperTest {
     private IMailAuthenticationTokensMapper mailAuthenticationTokensMapper;
 
     @ParameterizedTest
+    @Sql("classpath:/sql/CreateUser.sql")
     @MethodSource("INSERTできるかのテストデータ")
     public void INSERTできるか(final MailAuthenticationToken mailAuthenticationToken) {
         final int result = this.mailAuthenticationTokensMapper.insert(mailAuthenticationToken);
@@ -28,6 +29,20 @@ public class MailAuthenticationTokensMapperTest {
 
     private static Stream<MailAuthenticationToken> INSERTできるかのテストデータ() {
         final var m = MailAuthenticationToken.generate(1);
+        return Stream.of(m);
+    }
+
+    @ParameterizedTest
+    @Sql("classpath:/sql/CreateUser.sql")
+    @MethodSource("新しいメール付きでINSERTできるかのテストデータ")
+    public void 新しいメール付きでINSERTできるか(final MailAuthenticationToken mailAuthenticationToken) {
+        final int result = this.mailAuthenticationTokensMapper.insertWithNewMail(mailAuthenticationToken);
+        assert result == 1;
+        assert mailAuthenticationToken.getId() != -1;
+    }
+
+    private static Stream<MailAuthenticationToken> 新しいメール付きでINSERTできるかのテストデータ() {
+        final var m = MailAuthenticationToken.generate(1, "sample@example.com");
         return Stream.of(m);
     }
 

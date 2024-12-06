@@ -13,6 +13,7 @@ import java.util.UUID;
 public class MailAuthenticationToken {
     private int id;
     private UUID token;
+    private String newMail;
     private int userId;
     private LocalDateTime createdAt;
 
@@ -20,6 +21,17 @@ public class MailAuthenticationToken {
         return new MailAuthenticationToken(
                 -1,
                 UUID.randomUUID(),
+                "",
+                userId,
+                LocalDateTime.now()
+        );
+    }
+
+    public static MailAuthenticationToken generate(final int userId, final String newMail) {
+        return new MailAuthenticationToken(
+                -1,
+                UUID.randomUUID(),
+                newMail,
                 userId,
                 LocalDateTime.now()
         );

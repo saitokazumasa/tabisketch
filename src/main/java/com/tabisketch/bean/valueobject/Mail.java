@@ -10,4 +10,12 @@ public record Mail(String toMail, String subject, String content) {
                 "https://tabisketch.com/mail/confirm/" + token.toString()
         );
     }
+
+    public static Mail generateEditMail(final String toMail, final UUID token) {
+        return new Mail(
+                toMail,
+                "たびすけっち メールアドレス変更確認のメール",
+                "https://tabisketch.com/mail/confirm/" + token.toString()
+        );
+    }
 }

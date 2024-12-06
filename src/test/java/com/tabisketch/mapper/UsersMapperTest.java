@@ -39,9 +39,25 @@ public class UsersMapperTest {
     }
 
     @ParameterizedTest
+    @Sql("classpath:/sql/CreateUser.sql")
+    @ValueSource(strings = {"sample2@example.com"})
+    public void mailをUPDATEできるか(final String mail) {
+        final int result = this.usersMapper.updateMail(1, mail);
+        assert result == 1;
+    }
+
+    @ParameterizedTest
     @ValueSource(booleans = {true, false})
     public void isMailVerifiedをUPDATEできるか(final boolean isMailVerified) {
         final int result = this.usersMapper.updateMailVerified(1, isMailVerified);
         assert result == 1;
+    }
+
+    @ParameterizedTest
+    @Sql("classpath:/sql/CreateUser.sql")
+    @ValueSource(strings = {"sample@example.com"})
+    public void isExistMailが動作するか(final String mail) {
+        assert this.usersMapper.isExistMail(mail) == 1;
+        assert this.usersMapper.isExistMail(mail + "aaa") == 0;
     }
 }

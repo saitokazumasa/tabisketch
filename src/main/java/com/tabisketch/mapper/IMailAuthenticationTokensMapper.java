@@ -11,6 +11,10 @@ public interface IMailAuthenticationTokensMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id,token")
     int insert(final MailAuthenticationToken mailAuthenticationToken);
 
+    @Insert("INSERT INTO mail_authentication_tokens (user_id, new_mail) VALUES (#{userId}, #{newMail})")
+    @Options(useGeneratedKeys = true, keyProperty = "id,token")
+    int insertWithNewMail(final MailAuthenticationToken mailAuthenticationToken);
+
     @Select("SELECT * FROM mail_authentication_tokens WHERE token = #{token}")
     MailAuthenticationToken selectByToken(final UUID token);
 
