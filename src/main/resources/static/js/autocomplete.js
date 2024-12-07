@@ -44,6 +44,23 @@ class AutoComplete {
 
         const sessionToken = new SessionToken();
         this.#value.setOptions({sessionToken: sessionToken.value()});
+
+        // placeId, lat, lng の更新
+        if (this.#inputElement.id === initInstanceKeys[0]) {
+            document.getElementById('startPlaceId').value = place.place_id;
+            document.getElementById('startLat').value = place.geometry.location.lat();
+            document.getElementById('startLng').value = place.geometry.location.lng();
+            return;
+        }
+        if (this.#inputElement.id === initInstanceKeys[1]) {
+            document.getElementById('endPlaceId').value = place.place_id;
+            document.getElementById('endLat').value = place.geometry.location.lat();
+            document.getElementById('endLng').value = place.geometry.location.lng();
+            return;
+        }
+        document.getElementById(`placeId${placeNum.value()}`).value = place.place_id;
+        document.getElementById(`placeLat${placeNum.value()}`).value = place.geometry.location.lat();
+        document.getElementById(`placeLng${placeNum.value()}`).value = place.geometry.location.lng();
     }
 }
 
@@ -63,7 +80,6 @@ const initInstanceKeys = [
 
 const autoCompleteList = new AutoCompleteList();
 
-// eslint-disable-next-line no-unused-vars
 function initAutoComplete() {
     initInstanceKeys.forEach(key => {
         const inputElement = document.getElementById(key);
