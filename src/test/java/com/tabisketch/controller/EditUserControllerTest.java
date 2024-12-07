@@ -3,7 +3,9 @@ package com.tabisketch.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -12,13 +14,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class EditUserControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
     @Test
-    @WithMockUser
+    @WithMockUser(username = "sample@example.com")
     public void getが動作するか() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/edit"))
+        final String mail = getCurrentMail();
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .get("/user/edit"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("user/edit/index"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("item"));
+                .andExpect(MockMvcResultMatchers.model().attributeExists("mail"))
+                .andExpect(MockMvcResultMatchers.model().attribute("mail", mail))
+                .andExpect(MockMvcResultMatchers.view().name("user/edit/index"));
+    }
+    private String getCurrentMail() {
+        return SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
     }
 }
