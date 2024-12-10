@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<th:block th:fragment="plan-decision">
+    <button data-modal-target="popupModal" data-modal-toggle="popupModal" class="button-primary" type="button">確定</button>
+
+    <div id="popupModal" tabindex="-1" class="fixed inset-0 z-50 justify-center items-center hidden">
+        <div class="relative p-4 w-full max-w-3xl">
+            <div class="relative bg-white rounded-lg shadow min-w-80 max-w-3xl">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="popupModal">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                </button>
+                <div class="flex justify-center p-4 md:p-5 text-center">
+                    <div class="mt-10">
+                        <h3 class="mb-5 text-xs md:text-xl text-red-600 whitespace-nowrap">プラン確定をするとプラン編集ができません！</h3>
+                        <p class="text-xs md:text-xl">日付の追加や経路編集をしたい場合は、確認してください。また、プランを後で編集したい場合は一時保存をしてください。</p>
+                        <div class="mt-10 whitespace-nowrap">
+                            <button data-modal-hide="popupModal" type="button" class="button-primary mx-5">
+                                プラン確定
+                            </button>
+                            <button data-modal-hide="popupModal" type="button" class="button-secondary mx-5">
+                                閉じる
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="cover-image">
+    <button data-modal-target="imageModal" data-modal-toggle="imageModal" type="button">
+        <th:block th:replace="fragment/svg :: camera"/>
+    </button>
+
+    <div id="imageModal" tabindex="-1" class="fixed inset-0 z-50 justify-center items-center hidden">
+        <div class="relative p-4 w-full max-w-3xl">
+            <div class="relative bg-white rounded-lg shadow min-w-80 max-w-3xl">
+                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="imageModal">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                </button>
+                <div class="text-center p-4 md:p-5">
+                    <div class="my-10">
+                        <h3 class="text-sm md:text-xl whitespace-nowrap">カバー画像を選んでください。</h3>
+                        <p class="text-sm md:text-xl text-red-600 whitespace-nowrap">個人情報となる画像は入れないでください。</p>
+                    </div>
+                    <form class="space-y-4" action="#" method="post" enctype="multipart/form-data">
+                        <input type="file" id="image" name="image" accept="image/*" class="border text-sm rounded-lg w-full" required />
+                        <div class="flex justify-center gap-6">
+                            <button type="submit" class="button-primary">
+                                画像確定
+                            </button>
+                            <button data-modal-hide="imageModal" type="button" class="button-secondary">
+                                閉じる
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
