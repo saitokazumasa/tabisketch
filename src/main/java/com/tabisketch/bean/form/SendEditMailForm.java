@@ -4,24 +4,22 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class SendEditMailForm {
     @Email
     @NotBlank
-    private String currentMail;
+    private String currentMailAddress;
 
     @Email
     @NotBlank
-    private String newMail;
+    private String newMailAddress;
 
     @NotBlank
     private String currentPassword;
 
-    public static SendEditMailForm generate(final String currentMail) {
-        return new SendEditMailForm(currentMail, "", "");
+    public static SendEditMailForm empty() {
+        return new SendEditMailForm("", "", "");
     }
 }

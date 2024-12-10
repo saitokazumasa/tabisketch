@@ -19,7 +19,7 @@
                 <!-- ログイン状態に応じた表示 -->
                 <li class="mx-1 xl:mx-3" sec:authorize="isAuthenticated()"><a th:href="@{/plan/list}">プラン一覧</a></li>
                 <li class="mx-1 xl:mx-3" sec:authorize="isAuthenticated()"><a th:href="@{/plan/create}">プラン作成</a></li>
-                <li class="mx-1 xl:mx-3" sec:authorize="isAuthenticated()"><a href="#">アカウント編集</a></li>
+                <li class="mx-1 xl:mx-3" sec:authorize="isAuthenticated()"><a th:href="@{/user/edit}">アカウント編集</a></li>
                 <li class="mx-1 xl:mx-3" sec:authorize="isAnonymous()"><a th:href="@{/login}" class="button-primary">ログイン</a></li>
                 <li class="mx-1 xl:mx-3" sec:authorize="isAnonymous()"><a th:href="@{/register}" class="button-primary">新規登録</a></li>
                 <li class="mx-1 xl:mx-3" sec:authorize="isAuthenticated()">
@@ -33,7 +33,7 @@
         <ul class="fixed right-0 h-full w-1/2 bg-white flex-col border-l-2 border-b-2 text-center pt-4 space-y-10 hidden text-base" id="mobile-menu">
             <li sec:authorize="isAuthenticated()"><a th:href="@{/plan/list}">プラン一覧</a></li>
             <li sec:authorize="isAuthenticated()"><a th:href="@{/plan/create}">プラン作成</a></li>
-            <li sec:authorize="isAuthenticated()"><a href="#">アカウント編集</a></li>
+            <li sec:authorize="isAuthenticated()"><a th:href="@{/user/edit}">アカウント編集</a></li>
             <li sec:authorize="isAnonymous()"><a th:href="@{/login}">ログイン</a></li>
             <li sec:authorize="isAnonymous()"><a th:href="@{/register}">新規登録</a></li>
             <li sec:authorize="isAuthenticated()">

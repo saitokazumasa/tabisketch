@@ -2,18 +2,20 @@ package com.tabisketch.service;
 
 import com.tabisketch.bean.entity.User;
 import com.tabisketch.bean.form.SendEditMailForm;
-import com.tabisketch.mapper.IMailAuthenticationTokensMapper;
+import com.tabisketch.mapper.IMailAddressAuthTokensMapper;
 import com.tabisketch.mapper.IUsersMapper;
-import com.tabisketch.service.implement.SendEditMailService;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -22,30 +24,37 @@ public class SendEditMailServiceTest {
     @MockBean
     private IUsersMapper usersMapper;
     @MockBean
-    private IMailAuthenticationTokensMapper mailAuthenticationTokensMapper;
+    private IMailAddressAuthTokensMapper mailAuthenticationTokensMapper;
     @MockBean
     private ISendMailService sendMailService;
+    @Autowired
+    private ISendEditMailService sendEditMailService;
 
     @ParameterizedTest
-    @MethodSource("動作するかのテストデータ")
+    @MethodSource("sampleSendEditMailForm")
+    @WithMockUser
     public void 動作するか(final SendEditMailForm sendEditMailForm) throws MessagingException {
-        when(usersMapper.selectByMail(sendEditMailForm.getCurrentMail()))
-                .thenReturn(User.generate("", ""));
+        when(this.usersMapper.selectByMailAddress(anyString())).thenReturn(sampleUser());
 
-        final var editMailService = new SendEditMailService(
-                this.usersMapper,
-                this.mailAuthenticationTokensMapper,
-                this.sendMailService
-        );
-        editMailService.execute(sendEditMailForm);
-
-        verify(usersMapper).selectByMail(any());
-        verify(mailAuthenticationTokensMapper).insertWithNewMail(any());
-        verify(sendMailService).execute(any());
+        this.sendEditMailService.execute(sendEditMailForm);
+        verify(this.usersMapper).selectByMailAddress(anyString());
+        verify(this.mailAuthenticationTokensMapper).insertWithNewMail(any());
+        verify(this.sendMailService).execute(any());
     }
 
-    private static Stream<SendEditMailForm> 動作するかのテストデータ() {
-        final var e = new SendEditMailForm("sample@example.com", "sample2@example.com", "password");
-        return Stream.of(e);
+    private static User sampleUser() {
+        return User.generate(
+                "sample@example.com",
+                "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO"
+        );
+    }
+
+    private static Stream<SendEditMailForm> sampleSendEditMailForm() {
+        final var sendEditMailFrom = new SendEditMailForm(
+                "sample@example.com",
+                "sample2@example.com",
+                "password"
+        );
+        return Stream.of(sendEditMailFrom);
     }
 }

@@ -39,7 +39,9 @@ public class SendEditMailController {
             final @AuthenticationPrincipal UserDetails userDetails,
             final Model model
     ) {
-        model.addAttribute("sendEditMailForm", SendEditMailForm.generate(userDetails.getUsername()));
+        final var sendEditMailForm = SendEditMailForm.empty();
+        sendEditMailForm.setCurrentMailAddress(userDetails.getUsername());
+        model.addAttribute("sendEditMailForm", sendEditMailForm);
         return "user/edit/mail/index";
     }
 
@@ -54,13 +56,13 @@ public class SendEditMailController {
         // パスワードが間違ってる、メールアドレスが存在する、は表示せずに通して、処理だけ実行しない方がセキュリティ的には良いかも？
         if (isNotMatchPassword(userDetails.getUsername(), sendEditMailForm.getCurrentPassword()))
             bindingResult.rejectValue("currentPassword", "error.editMailForm", "パスワードが一致しません");
-        if (isNotExistMail(sendEditMailForm.getNewMail()))
+        if (isNotExistMail(sendEditMailForm.getNewMailAddress()))
             bindingResult.rejectValue("newMail", "error.editMailForm", "メールアドレスが存在します。");
         if (bindingResult.hasErrors()) return "user/edit/mail/index";
 
         this.sendEditMailService.execute(sendEditMailForm);
 
-        redirectAttributes.addFlashAttribute("mail", sendEditMailForm.getNewMail());
+        redirectAttributes.addFlashAttribute("mail", sendEditMailForm.getNewMailAddress());
         return "redirect:/user/edit/mail/send";
     }
 

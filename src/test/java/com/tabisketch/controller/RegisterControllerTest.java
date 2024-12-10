@@ -32,7 +32,7 @@ public class RegisterControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("postが動作するかのテストデータ")
+    @MethodSource("sampleRegisterForm")
     @WithMockUser
     public void postが動作するか(final RegisterForm registerForm) throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
@@ -44,13 +44,8 @@ public class RegisterControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/register/send"));
     }
 
-    private static Stream<RegisterForm> postが動作するかのテストデータ() {
-        final var f1 = new RegisterForm("example@mail.com", "password", "password");
-        return Stream.of(f1);
-    }
-
     @ParameterizedTest
-    @MethodSource("フォームがバリデーションエラーになるかのテストデータ")
+    @MethodSource("sampleErrorRegisterForm")
     @WithMockUser
     public void フォームがバリデーションエラーになるか(final RegisterForm registerForm) throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
@@ -64,20 +59,32 @@ public class RegisterControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("register/index"));
     }
 
-    private static Stream<RegisterForm> フォームがバリデーションエラーになるかのテストデータ() {
-        final var f1 = new RegisterForm();
-        final var f2 = new RegisterForm("", "password", "password");
-        final var f3 = new RegisterForm("example@mail.com", "", "password");
-        final var f4 = new RegisterForm("example@mail.com", "password", "");
-        final var f5 = new RegisterForm("example@mail.com", "password", "pass");
-        return Stream.of(f1, f2, f3, f4, f5);
-    }
-
     @Test
     @WithMockUser
     public void sendが動作するか() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/register/send"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("register/send"));
+    }
+
+    private static Stream<RegisterForm> sampleRegisterForm() {
+        final var registerForm = new RegisterForm(
+                "sample@example.com",
+                "password",
+                "password"
+        );
+        return Stream.of(registerForm);
+    }
+
+    private static Stream<RegisterForm> sampleErrorRegisterForm() {
+        // mailが未入力
+        final var registerForm1 = new RegisterForm("", "password", "password");
+        // passwordが未入力
+        final var registerForm2 = new RegisterForm("example@mail.com", "", "password");
+        // rePasswordが未入力
+        final var registerForm3 = new RegisterForm("example@mail.com", "password", "");
+        // passwordとrePasswordが一致しない
+        final var registerForm4 = new RegisterForm("example@mail.com", "password", "pass");
+        return Stream.of(registerForm1, registerForm2, registerForm3, registerForm4);
     }
 }

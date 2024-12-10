@@ -3,14 +3,16 @@ package com.tabisketch.service;
 import com.tabisketch.bean.entity.User;
 import com.tabisketch.bean.form.IsMatchPasswordForm;
 import com.tabisketch.mapper.IUsersMapper;
-import com.tabisketch.service.implement.IsMatchPasswordService;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.stream.Stream;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,38 +20,41 @@ import static org.mockito.Mockito.when;
 public class IsMatchPasswordServiceTest {
     @MockBean
     private IUsersMapper usersMapper;
+    @Autowired
+    private IIsMatchPasswordService isMatchPasswordService;
 
     @ParameterizedTest
-    @MethodSource("一致する時trueを返すかのテストデータ")
+    @MethodSource("sampleTrueIsMatchPasswordForm")
     public void 一致する時trueを返すか(final IsMatchPasswordForm isMatchPasswordForm) {
-        when(this.usersMapper.selectByMail(isMatchPasswordForm.getMail()))
-                .thenReturn(User.generate(isMatchPasswordForm.getMail(), "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO"));
+        when(this.usersMapper.selectByMailAddress(anyString())).thenReturn(sampleUser());
 
-        final var isMatchPasswordService = new IsMatchPasswordService(this.usersMapper);
-
-        assert isMatchPasswordService.execute(isMatchPasswordForm);
-        verify(this.usersMapper).selectByMail(isMatchPasswordForm.getMail());
-    }
-
-    private static Stream<IsMatchPasswordForm> 一致する時trueを返すかのテストデータ() {
-        final var i = new IsMatchPasswordForm("sample@example.com", "password");
-        return Stream.of(i);
+        assert this.isMatchPasswordService.execute(isMatchPasswordForm);
+        verify(this.usersMapper).selectByMailAddress(anyString());
     }
 
     @ParameterizedTest
-    @MethodSource("一致しないときfalseを返すかのテストデータ")
+    @MethodSource("sampleFalseIsMatchPasswordForm")
     public void 一致しないときfalseを返すか(final IsMatchPasswordForm isMatchPasswordForm) {
-        when(this.usersMapper.selectByMail(isMatchPasswordForm.getMail()))
-                .thenReturn(User.generate(isMatchPasswordForm.getMail(), "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO"));
+        when(this.usersMapper.selectByMailAddress(any())).thenReturn(sampleUser());
 
-        final var isMatchPasswordService = new IsMatchPasswordService(this.usersMapper);
-
-        assert !isMatchPasswordService.execute(isMatchPasswordForm);
-        verify(this.usersMapper).selectByMail(isMatchPasswordForm.getMail());
+        assert !this.isMatchPasswordService.execute(isMatchPasswordForm);
+        verify(this.usersMapper).selectByMailAddress(isMatchPasswordForm.getMailAddress());
     }
 
-    private static Stream<IsMatchPasswordForm> 一致しないときfalseを返すかのテストデータ() {
-        final var i = new IsMatchPasswordForm("sample@example.com", "***");
-        return Stream.of(i);
+    private static User sampleUser() {
+        return User.generate(
+                "sample@example.com",
+                "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO"
+        );
+    }
+
+    private static Stream<IsMatchPasswordForm> sampleTrueIsMatchPasswordForm() {
+        final var isMatchPasswordForm = new IsMatchPasswordForm("sample@example.com", "password");
+        return Stream.of(isMatchPasswordForm);
+    }
+
+    private static Stream<IsMatchPasswordForm> sampleFalseIsMatchPasswordForm() {
+        final var isMatchPasswordForm = new IsMatchPasswordForm("sample@example.com", "false-password");
+        return Stream.of(isMatchPasswordForm);
     }
 }

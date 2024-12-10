@@ -1,6 +1,6 @@
 package com.tabisketch.service.implement;
 
-import com.tabisketch.bean.valueobject.Mail;
+import com.tabisketch.valueobject.Mail;
 import com.tabisketch.service.ISendMailService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class SendMailService implements ISendMailService {
     @Value("${spring.mail.username}")
     private String formMail;
-
     private final JavaMailSender mailSender;
 
     public SendMailService(final JavaMailSender mailSender) {
@@ -27,9 +26,9 @@ public class SendMailService implements ISendMailService {
         final var messageHelper = new MimeMessageHelper(message, true);
 
         messageHelper.setFrom(this.formMail);
-        messageHelper.setTo(mail.toMail());
-        messageHelper.setSubject(mail.subject());
-        messageHelper.setText(mail.content());
+        messageHelper.setTo(mail.getToMail());
+        messageHelper.setSubject(mail.getSubject());
+        messageHelper.setText(mail.getContent());
 
         this.mailSender.send(message);
     }

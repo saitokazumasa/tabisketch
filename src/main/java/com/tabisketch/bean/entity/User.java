@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
     private int id;
-    private String mail;
+    private String mailAddress;
     private String password;
     private Boolean isMailVerified;
 

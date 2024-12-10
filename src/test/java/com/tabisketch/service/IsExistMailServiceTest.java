@@ -1,26 +1,36 @@
 package com.tabisketch.service;
 
 import com.tabisketch.mapper.IUsersMapper;
-import com.tabisketch.service.implement.IsExistMailService;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.mockito.ArgumentMatchers.any;
+import java.util.stream.Stream;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class IsExistMailServiceTest {
     @MockBean
     private IUsersMapper usersMapper;
+    @Autowired
+    private IIsExistMailService isExistMailService;
 
     @ParameterizedTest
-    @ValueSource(strings = {"sample@example.com"})
-    public void 動作するか(final String mail) {
-        when(this.usersMapper.isExistMail(any())).thenReturn(1);
+    @MethodSource("sampleMailAddress")
+    public void 動作するか(final String mailAddress) {
+        when(this.usersMapper.isExistMailAddress(anyString())).thenReturn(1);
 
-        final var isExistMailService = new IsExistMailService(this.usersMapper);
-        assert isExistMailService.execute(mail);
+        assert this.isExistMailService.execute(mailAddress);
+        verify(this.usersMapper).isExistMailAddress(anyString());
+    }
+
+    private static Stream<String> sampleMailAddress() {
+        final var mailAddress = "sample@example.com";
+        return Stream.of(mailAddress);
     }
 }
