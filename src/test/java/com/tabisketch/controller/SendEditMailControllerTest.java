@@ -4,14 +4,11 @@ import com.tabisketch.bean.form.SendEditMailForm;
 import com.tabisketch.service.IIsExistMailService;
 import com.tabisketch.service.IIsMatchPasswordService;
 import com.tabisketch.service.ISendEditMailService;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,12 +31,10 @@ public class SendEditMailControllerTest {
     @MockBean
     private ISendEditMailService sendEditMailService; // DIで使用している
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("sampleInitSendEditMailForm")
     @WithMockUser(username = "sample@example.com")
-    public void getが動作するか() throws Exception {
-        final var mail = getCurrentMail();
-        final var sendEditMailForm = SendEditMailForm.generate(mail);
-
+    public void getが動作するか(final SendEditMailForm sendEditMailForm) throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/user/edit/mail"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("sendEditMailForm"))
@@ -47,16 +42,9 @@ public class SendEditMailControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("user/edit/mail/index"));
     }
 
-    private String getCurrentMail() {
-        return SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
-    }
-
     @ParameterizedTest
-    @MethodSource("postが動作するかのテストデータ")
-    @WithMockUser(password = "$2a$10$G7Emd1ALL6ibttkgRZtBZeX6Qps6lgEGKq.njouwtiuE4uvjD2YMO")
+    @MethodSource("sampleSendEditMailForm")
+    @WithMockUser(username = "sample@example.com", password = "$2a$10$G7Emd1ALL6ibttkgRZtBZeX6Qps6lgEGKq.njouwtiuE4uvjD2YMO")
     public void postが動作するか(final SendEditMailForm sendEditMailForm) throws Exception {
         when(this.isMatchPasswordService.execute(any())).thenReturn(true);
         when(this.isExistMailService.execute(any())).thenReturn(false);
@@ -70,20 +58,35 @@ public class SendEditMailControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/user/edit/mail/send"));
     }
 
-    private static Stream<SendEditMailForm> postが動作するかのテストデータ() {
-        final var e1 = new SendEditMailForm("sample@example.com", "sample2@example.com", "password");
-        return Stream.of(e1);
-    }
-
     @ParameterizedTest
-    @ValueSource(strings = {"sample2@example.com"})
+    @MethodSource("sampleMailAddress")
     @WithMockUser
-    public void sendが動作するか(final String mail) throws Exception {
+    public void sendが動作するか(final String mailAddress) throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .get("/user/edit/mail/send")
-                        .flashAttr("mail", mail)
+                        .flashAttr("mailAddress", mailAddress)
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                 ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("user/edit/mail/send"));
+    }
+
+    private static Stream<String> sampleMailAddress() {
+        final var mailAddress = "sample@example.com";
+        return Stream.of(mailAddress);
+    }
+
+    private static Stream<SendEditMailForm> sampleInitSendEditMailForm() {
+        final var sendEditMailForm = SendEditMailForm.empty();
+        sendEditMailForm.setCurrentMailAddress("sample@example.com");
+        return Stream.of(sendEditMailForm);
+    }
+
+    private static Stream<SendEditMailForm> sampleSendEditMailForm() {
+        final var sendEditMailForm = new SendEditMailForm(
+                "sample@example.com",
+                "sample2@example.com",
+                "password"
+        );
+        return Stream.of(sendEditMailForm);
     }
 }

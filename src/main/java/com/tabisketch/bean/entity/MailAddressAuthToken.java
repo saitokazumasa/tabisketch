@@ -10,15 +10,18 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MailAuthenticationToken {
+public class MailAddressAuthToken {
     private int id;
     private UUID token;
-    private String newMail;
+    private String newMailAddress;
     private int userId;
     private LocalDateTime createdAt;
 
-    public static MailAuthenticationToken generate(final int userId) {
-        return new MailAuthenticationToken(
+    /**
+     * 新規登録時に使う
+     */
+    public static MailAddressAuthToken generate(final int userId) {
+        return new MailAddressAuthToken(
                 -1,
                 UUID.randomUUID(),
                 "",
@@ -27,11 +30,14 @@ public class MailAuthenticationToken {
         );
     }
 
-    public static MailAuthenticationToken generate(final int userId, final String newMail) {
-        return new MailAuthenticationToken(
+    /**
+     * メール編集時に使う
+     */
+    public static MailAddressAuthToken generate(final int userId, final String newMailAddress) {
+        return new MailAddressAuthToken(
                 -1,
                 UUID.randomUUID(),
-                newMail,
+                newMailAddress,
                 userId,
                 LocalDateTime.now()
         );

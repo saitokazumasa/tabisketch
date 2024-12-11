@@ -21,10 +21,10 @@ public class ListPlanController {
 
     @GetMapping
     public String get(
-            final @AuthenticationPrincipal(expression = "username") String mail,
+            final @AuthenticationPrincipal(expression = "username") String mailAddress,
             final Model model
     ) {
-        final List<Plan> planList = listPlanService.execute(mail);
+        final List<Plan> planList = this.listPlanService.execute(mailAddress);
         model.addAttribute("planList", planList);
         return "plan/list";
     }

@@ -28,7 +28,7 @@ public class LoginUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         // NOTE: メールアドレスを "username" として扱う
-        return user.getMail();
+        return user.getMailAddress();
     }
 
     @Override

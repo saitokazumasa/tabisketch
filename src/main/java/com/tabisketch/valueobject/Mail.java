@@ -1,8 +1,24 @@
-package com.tabisketch.bean.valueobject;
+package com.tabisketch.valueobject;
+
+import lombok.Getter;
 
 import java.util.UUID;
 
-public record Mail(String toMail, String subject, String content) {
+@Getter
+public class Mail {
+    final String toMail;
+    final String subject;
+    final String content;
+
+    private Mail(final String toMail, final String subject, final String content) {
+        this.toMail = toMail;
+        this.subject = subject;
+        this.content = content;
+    }
+
+    /**
+     * 新規登録メールを生成する
+     */
     public static Mail generateRegisterMail(final String toMail, final UUID token) {
         return new Mail(
                 toMail,
@@ -11,6 +27,9 @@ public record Mail(String toMail, String subject, String content) {
         );
     }
 
+    /**
+     * メールアドレス編集メールを生成する
+     */
     public static Mail generateEditMail(final String toMail, final UUID token) {
         return new Mail(
                 toMail,

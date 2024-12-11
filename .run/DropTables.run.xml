@@ -8,7 +8,7 @@
     <script-file value="$PROJECT_DIR$/.run/sql/DropGooglePlacesTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/DropDaysTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/DropPlansTable.sql" />
-    <script-file value="$PROJECT_DIR$/.run/sql/DropMailAuthenticationsTable.sql" />
+    <script-file value="$PROJECT_DIR$/.run/sql/DropMaiAddressAuthTokensTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/DropPasswordResetTokensTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/DropUsersTable.sql" />
     <script-mode>FILE</script-mode>

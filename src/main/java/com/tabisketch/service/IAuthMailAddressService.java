@@ -1,5 +1,5 @@
 package com.tabisketch.service;
 
-public interface IAuthenticateMailService {
+public interface IAuthMailAddressService {
     boolean execute(final String token);
 }

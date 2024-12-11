@@ -17,7 +17,7 @@ public class LoginUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String mail) throws UsernameNotFoundException {
-        final User user = usersMapper.selectByMail(mail);
+        final User user = usersMapper.selectByMailAddress(mail);
 
         if (user == null) throw new UsernameNotFoundException(mail);
 

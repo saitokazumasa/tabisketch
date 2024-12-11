@@ -23,8 +23,8 @@ public class ListPlanService implements IListPlanService {
     }
 
     @Override
-    public List<Plan> execute(final String mail) {
-        final User user = usersMapper.selectByMail(mail);
+    public List<Plan> execute(final String mailAddress) {
+        final User user = usersMapper.selectByMailAddress(mailAddress);
         return plansMapper.selectByUserId(user.getId());
     }
 }

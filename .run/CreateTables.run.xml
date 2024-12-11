@@ -2,7 +2,7 @@
   <configuration default="false" name="CreateTables" type="DatabaseScript">
     <script-file value="$PROJECT_DIR$/.run/sql/CreateUsersTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/CreatePasswordResetTokensTable.sql" />
-    <script-file value="$PROJECT_DIR$/.run/sql/CreateMailAuthenticationTokens.sql" />
+    <script-file value="$PROJECT_DIR$/.run/sql/CreateMailAuthTokens.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/CreatePlansTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/CreateDaysTable.sql" />
     <script-file value="$PROJECT_DIR$/.run/sql/CreateGooglePlacesTable.sql" />

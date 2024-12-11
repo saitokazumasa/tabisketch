@@ -1,21 +1,19 @@
 package com.tabisketch.service;
 
-import com.tabisketch.bean.entity.Plan;
 import com.tabisketch.bean.entity.User;
 import com.tabisketch.mapper.IPlansMapper;
 import com.tabisketch.mapper.IUsersMapper;
-import com.tabisketch.service.implement.ListPlanService;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Stream;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -24,23 +22,31 @@ public class ListPlanServiceTest {
     private IUsersMapper usersMapper;
     @MockBean
     private IPlansMapper plansMapper;
+    @Autowired
+    private IListPlanService listPlanService;
 
-    @Test
-    @WithMockUser(username = "sample@example.com")
-    public void 動作するか() {
-        final var mail = getCurrentMail();
-        when(this.usersMapper.selectByMail(mail)).thenReturn(User.generate("sample@example.com", "password"));
-        when(this.plansMapper.selectByUserId(-1)).thenReturn(new ArrayList<Plan>());
+    @ParameterizedTest
+    @MethodSource("sampleMailAddress")
+    public void 動作するか(final String mailAddress) {
+        when(this.usersMapper.selectByMailAddress(anyString())).thenReturn(sampleUser());
+        when(this.plansMapper.selectByUserId(anyInt())).thenReturn(new ArrayList<>());
 
-        final var listPlanService = new ListPlanService(this.usersMapper, this.plansMapper);
-        final List<Plan> planList = listPlanService.execute(mail);
+        final var planList = this.listPlanService.execute(mailAddress);
+
+        verify(this.usersMapper).selectByMailAddress(anyString());
+        verify(this.plansMapper).selectByUserId(anyInt());
         assert planList != null;
     }
 
-    private String getCurrentMail() {
-        return SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getName();
+    private static User sampleUser() {
+        return User.generate(
+                "sample@example.com",
+                "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO"
+        );
+    }
+
+    private static Stream<String> sampleMailAddress() {
+        final var mailAddress = "sample@example.com";
+        return Stream.of(mailAddress);
     }
 }
