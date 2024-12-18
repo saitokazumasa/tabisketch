@@ -56,7 +56,6 @@ public class SendEditPasswordServiceTest {
                 "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO"
         );
     }
-
     private static Stream<SendEditPasswordForm> sampleSendEditPasswordForm() {
         final var sendEditPasswordForm = new SendEditPasswordForm(
                 "$2a$10$if7oiFZVmP9I59AOtzbSz.dWsdPUUuPTRkcIoR8iYhFpG/0COY.TO",
