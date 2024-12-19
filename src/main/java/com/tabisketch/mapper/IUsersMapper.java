@@ -20,4 +20,7 @@ public interface IUsersMapper {
 
     @Select("SELECT COUNT(*) FROM users WHERE mail_address = #{mailAddress}")
     int isExistMailAddress(final String mailAddress);
+
+    @Update("UPDATE users SET password = #{password} WHERE mail_address = #{mailAddress}")
+    int updatePassword(final String mailAddress, final String password);
 }
