@@ -25,6 +25,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/share/**").permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/plan/**").authenticated()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll()
                 ).formLogin(a -> a
                         .loginPage("/login")
@@ -35,7 +36,7 @@ public class WebSecurityConfiguration {
                         .usernameParameter("mailAddress")
                         .permitAll()
                 ).logout(a -> a
-                        .logoutUrl("/logout/**")
+                        .logoutUrl("/logout")
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login")
                         .permitAll()

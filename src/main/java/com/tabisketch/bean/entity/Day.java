@@ -13,8 +13,8 @@ public class Day {
     private int planId;
     private int walkThreshold;
     private String preferTransportationListBinary;
-    private boolean isUseTollRoad;
-    private boolean isUseFerry;
+    private boolean useTollRoad;
+    private boolean useFerry;
 
     public static Day generate(
             final int day,

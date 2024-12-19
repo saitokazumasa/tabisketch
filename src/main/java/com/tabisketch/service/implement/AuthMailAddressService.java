@@ -34,7 +34,7 @@ public class AuthMailAddressService implements IAuthMailAddressService {
         final User user = this.usersMapper.selectById(maaToken.getUserId());
 
         // メールアドレスの更新があるかどうかで作るインスタンスを変える
-        final User newUser = StringUtils.isNotNullAndNotEmpty(maaToken.getNewMailAddress()) ?
+        final User newUser = StringUtils.notNullAndNotEmpty(maaToken.getNewMailAddress()) ?
                 new User(
                         user.getId(),
                         maaToken.getNewMailAddress(),

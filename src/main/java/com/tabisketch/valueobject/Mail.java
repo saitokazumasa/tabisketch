@@ -6,9 +6,9 @@ import java.util.UUID;
 
 @Getter
 public class Mail {
-    final String toMailAddress;
-    final String subject;
-    final String content;
+    private final String toMailAddress;
+    private final String subject;
+    private final String content;
 
     private Mail(final String toMailAddress, final String subject, final String content) {
         this.toMailAddress = toMailAddress;

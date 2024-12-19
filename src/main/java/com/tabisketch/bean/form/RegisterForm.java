@@ -26,8 +26,8 @@ public class RegisterForm {
 
     @AssertTrue(message = "パスワードが一致しません")
     public boolean isMatchPasswordAndRePassword() {
-        if (StringUtils.isNullAndEmpty(this.password)) return false;
-        if (StringUtils.isNullAndEmpty(this.rePassword)) return false;
+        if (StringUtils.nullAndEmpty(this.password)) return false;
+        if (StringUtils.nullAndEmpty(this.rePassword)) return false;
 
         return password.equals(rePassword);
     }

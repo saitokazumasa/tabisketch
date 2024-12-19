@@ -39,7 +39,7 @@ public class EditMailAddressService implements IEditMailAddressService {
         final User user = this.usersMapper.selectByMailAddress(editMailAddressForm.getCurrentMailAddress());
 
         if (existMailAddress(editMailAddressForm.getNewMailAddress())) return;
-        if (isNotMatchPassword(editMailAddressForm.getCurrentPassword(), user.getPassword())) return;
+        if (notMatchPassword(editMailAddressForm.getCurrentPassword(), user.getPassword())) return;
 
         final var maaToken = MAAToken.generate(user.getId(), editMailAddressForm.getNewMailAddress());
         final int insertResult = this.maaTokensMapper.insert(maaToken);
@@ -54,7 +54,7 @@ public class EditMailAddressService implements IEditMailAddressService {
         return this.usersMapper.selectByMailAddress(mailAddress) != null;
     }
 
-    private boolean isNotMatchPassword(final String rawPassword, final String encodedPassword) {
+    private boolean notMatchPassword(final String rawPassword, final String encodedPassword) {
         return !this.passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

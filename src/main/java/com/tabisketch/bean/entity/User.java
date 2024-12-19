@@ -11,7 +11,7 @@ public class User {
     private int id;
     private String mailAddress;
     private String password;
-    private Boolean isMailAddressAuthenticated;
+    private Boolean mailAddressAuthenticated;
 
     public static User generate(final String mailAddress, final String password) {
         return new User(
